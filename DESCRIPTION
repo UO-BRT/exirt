@@ -1,0 +1,30 @@
+Package: exirt
+Title: Analyze data from the Oregon Extended Assessment
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Daniel",
+           family = "Anderson",
+           role = c("aut", "cre"),
+           email = "daniela@uoregon.edu",
+           comment = c(ORCID = "https://orcid.org/0000-0003-4699-4680"))
+Description: Retrieves live data from the OR Extended database (via the 
+  dbprocess package) and analyzes the data. Provides functions for both 
+  analysis of the students (estimated using only the operational items), test
+  items (both operational and field test) and tests. Note that all operational
+  items are anchored to their previously estimated values (on the vertical 
+  scale) during analysis. This ensures that all newly estimated values (persons
+  and field test items) are relative to the established vertical scale. 
+  Functions to produce and plot the test information function and test 
+  characteristic curves are also provided.
+License: CC BY 4.0
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports: 
+    CDM,
+    dbprocess,
+    mirt,
+    TAM
+Remotes:
+    UO-BRT/dbprocess
