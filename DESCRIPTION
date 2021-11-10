@@ -24,7 +24,11 @@ RoxygenNote: 7.1.2
 Imports: 
     CDM,
     dbprocess,
-    mirt,
+    ggplot2,
+    orextdb,
     TAM
 Remotes:
-    UO-BRT/dbprocess
+    UO-BRT/dbprocess,
+    UO-BRT/orextdb
+Depends: 
+    R (>= 2.10)
