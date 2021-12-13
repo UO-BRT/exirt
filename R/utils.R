@@ -33,10 +33,13 @@ prep_items <- function(test) {
 #' @noRd
 create_anchors <- function(test, itemfile) {
   test <- prep_items(test)
-  item_sel <- (itemfile$item_id_brt %in% names(test))
+  item_sel <- itemfile$item_id_brt %in% names(test)
   anchors <- itemfile[item_sel, ]
   locs <- seq_len(ncol(test))[names(test) %in% anchors$item_id_brt]
-  m <- cbind(item_location = locs, item_difficulty = anchors$item_difficulty)
+  m <- cbind(
+    item_location = as.numeric(locs),
+    item_difficulty = as.numeric(anchors$item_difficulty)
+  )
   m[!is.na(m[ ,2]), ]
 }
 
