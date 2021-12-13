@@ -23,6 +23,14 @@ get_ft_items <- function(model_ob) {
   }
   ft <- lapply(model_ob, `[[`, "field_test_items")
   keep <- !vapply(ft, function(x) nrow(x) == 0, FUN.VALUE = logical(1))
+  if (!any(keep)) {
+    return(
+      data.frame(
+        item_loc = integer(),
+        item_id = character()
+      )
+    )
+  }
   bind_dfs(ft[keep])
 }
 
@@ -35,7 +43,7 @@ pull_item_diffs <- function(model) {
   difficulties <- model$model$xsi
 
   out <- data.frame(
-    item = rownames(difficulties),
+    item_id = rownames(difficulties),
     difficulty = difficulties$xsi,
     lower = ifelse(difficulties$se.xsi == 0,
       NA_real_,
