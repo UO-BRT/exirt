@@ -50,8 +50,9 @@ rasch_ <- function(test, items, omit_field_test = TRUE, anchored = TRUE, ...) {
   ft_frame <- data.frame(item_loc = ft, item_id = ft_ids)
 
   if (omit_field_test) {
-    item_data <- item_data[, anchors[, "item_location", drop = TRUE]]
-    anchors <- cbind(seq_len(ncol(item_data)), anchors[, "item_difficulty"])
+    anchor_locs <- anchors[, "item_location", drop = TRUE]
+    item_data <- item_data[, anchor_locs]
+    anchors <- cbind(seq_len(ncol(item_data)), anchors[, 2, drop = TRUE])
   }
 
   if (anchored) {
