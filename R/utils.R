@@ -14,7 +14,7 @@
 #' any(apply(prepped, 2, function(x) any(is.na(x))))
 #' }
 prep_items <- function(test) {
-  test <- test[ ,is_item(test)]
+  test <- test[, is_item(test)]
   as.data.frame(
     apply(test, 2, function(x) ifelse(is.na(x), 0, x))
   )
