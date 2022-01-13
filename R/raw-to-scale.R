@@ -1,8 +1,6 @@
 raw_to_scale <- function() {
-  items <- db_get("Items")
-  pd <- get_pattern_data(items = items)
-
-  models <- lapply(pd, rasch_, items)
+  pd <- get_pattern_data()
+  models <- rasch(pd)
 
   d <- lapply(pd, function(x) {
     x$id <- rownames(x)
@@ -15,7 +13,6 @@ raw_to_scale <- function() {
     x[c("raw", "theta", "theta_se")]
   })
 
-  raw_theta <- lapply(raw_theta, function(x) x[unique(x$raw), ])
   raw_theta
 }
 
@@ -47,7 +44,7 @@ convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
 }
 
 #' Raw to RIT conversions
-#' 
+#'
 #' Creates a single dataframe that has the raw score, theta value and standard
 #' error associated with that raw score, the conversion to a RIT score and
 #' RIT standard error, and the performance level for the corresponding score.
@@ -57,7 +54,7 @@ convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
 #'   the rounding is done as typical, not as [base::round()] does. See the 
 #'   source code for the \code{round2} function for more detail.
 #' @export
-#' 
+#'
 raw_to_rit <- function(round = TRUE) {
   rs <- raw_to_scale()
   out <- lapply(rs, convert_theta, names(rs))
