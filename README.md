@@ -22,5 +22,5 @@ You can install exirt with:
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("datalorax/exirt")
+remotes::install_github("UO-BRT/exirt")
 ```
