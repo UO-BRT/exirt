@@ -45,6 +45,7 @@ pull_item_diffs <- function(model) {
   out <- data.frame(
     item_id = rownames(difficulties),
     difficulty = difficulties$xsi,
+    se = difficulties$se.xsi,
     lower = ifelse(difficulties$se.xsi == 0,
       NA_real_,
       difficulties$xsi + qnorm(0.975) * difficulties$se.xsi
