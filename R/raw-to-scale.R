@@ -28,9 +28,15 @@ convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
   if (round) {
     ss <- round2(ss)
   }
-  pl <- cut(ss,
-            breaks = c(-Inf, cuts$c1, cuts$c2, cuts$c3, Inf),
-            labels = 1:4)
+  if (!grepl("^Rdg|^Wri", name)) {
+    pl <- cut(ss,
+      breaks = c(-Inf, cuts$c1, cuts$c2, cuts$c3, Inf),
+      labels = 1:4
+    )
+  } else {
+    pl <- rep(NA_integer_, length(ss))
+  }
+
 
   d <- data.frame(
     theta = raw_theta_tbl$theta,
