@@ -11,7 +11,11 @@
 
 estimate_abilities <- function(test, single_df = TRUE) {
   models <- rasch(test)
-  get_person_estimates(models, test, single_df)
+  pers <- get_person_estimates(models, test, single_df)
+  nms <- names(pers)
+  pers$content <- gsub("^(.+)_G.+$", "\\1", pers$test)
+  pers$grade <- gsub("^.+_G(\\d\\d?)$", "\\1", pers$test)
+  pers[c("content", "grade", nms)]
 }
 
 #' High-level function to estimate/create item difficulty estimates 
@@ -28,8 +32,13 @@ estimate_abilities <- function(test, single_df = TRUE) {
 
 estimate_ft_difficulties <- function(test, single_df = TRUE) {
   models <- rasch(test, omit_field_test = FALSE)
-  item_estimates <- get_item_diffs(models, single_df)
   ft_items <- get_ft_items(models)
+  if (nrow(ft_items) == 0) {
+    warning("No field test items detected.", call. = FALSE)
+    return()
+  }
+
+  item_estimates <- get_item_diffs(models, single_df)
 
   out <- merge(
     item_estimates,
