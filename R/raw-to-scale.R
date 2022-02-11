@@ -37,7 +37,6 @@ convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
     pl <- rep(NA_integer_, length(ss))
   }
 
-
   d <- data.frame(
     theta = raw_theta_tbl$theta,
     theta_se = raw_theta_tbl$theta_se,
@@ -63,6 +62,7 @@ convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
 #'
 raw_to_rit <- function(round = TRUE) {
   rs <- raw_to_scale()
-  out <- lapply(rs, convert_theta, names(rs))
+  out <- Map(convert_theta, rs, names(rs))
+
   bind_dfs(out)
 }
