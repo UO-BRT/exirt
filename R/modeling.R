@@ -1,6 +1,6 @@
 #' Function estimate Rasch models
 #'
-#' Uses [TAM::tam.mml()] under the hood, becuase the theta estimates from this
+#' Uses [TAM::tam.mml()] under the hood, because the theta estimates from this
 #' package most closely matched those from Winsteps (specifically for extreme)
 #' cases. Can estimate models from either a list tests or a single test.
 #' Takes care of the item prep (i.e., recoding \code{NA} values to 0) and,
@@ -8,7 +8,7 @@
 #'
 #' @param test Either a list of test score data from which to estimate models
 #'   or a single data frame with the item-level data. Note, this can be all
-#'   tests. It does not have to be a list of only one content area, for 
+#'   tests. It does not have to be a list of only one content area, for
 #'   example.
 #' @param omit_field_test Should field test items (those that are not anchored)
 #'   be omitted in the estimation? Defaults to \code{TRUE}. Note this should
@@ -22,12 +22,12 @@
 #' \dontrun{
 #'   library(exirt)
 #'   all_tests <- dbprocess::get_items(db = "2021")
-#'   models <- rasch_batch(all_tests)
+#'   models <- rasch(all_tests)
 #' }
 rasch <- function(test, omit_field_test = TRUE, anchored = TRUE, ...) {
   itms <- orextdb::db_get("Items", db = attr(test, "db"))
   if (is.data.frame(test)) {
-    return(rasch_(test, itms, omit_field_test, anchored))
+    return(rasch_(test, itms, omit_field_test, anchored, ...))
   }
   lapply(test, rasch_, itms, omit_field_test, anchored, ...)
 }
