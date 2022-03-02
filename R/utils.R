@@ -31,11 +31,15 @@ prep_items <- function(test) {
 #'   \code{orextdb::db_get("Items")}
 #' @keywords internal
 #' @noRd
+
 create_anchors <- function(test, itemfile) {
   test <- prep_items(test)
   item_sel <- itemfile$item_id_brt %in% names(test)
   anchors <- itemfile[item_sel, ]
+  #anchors <- dplyr::distinct(anchors, item_id_brt, .keep_all = TRUE)
+
   locs <- seq_len(ncol(test))[names(test) %in% anchors$item_id_brt]
+
   m <- cbind(
     item_location = as.numeric(locs),
     item_difficulty = as.numeric(anchors$item_difficulty)
@@ -95,7 +99,7 @@ round2 <- function(x, n = 0) {
 #' @keywords internal
 #' @noRd
 paste_collapse <- function(x) {
-  x[length(x)] <- paste("and", x[length(x)])  
+  x[length(x)] <- paste("and", x[length(x)])
   x[-length(x)] <- paste0(x[-length(x)], ",")
   paste(x, collapse = " ")
 }
