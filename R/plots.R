@@ -1,8 +1,8 @@
 #' Estimate the probability of a correct response
 #'
-#' This function works because we know we have a Rasch model, otherwise the 
+#' This function works because we know we have a Rasch model, otherwise the
 #' function would be just a bit more complicated. Provides the probability of a
-#' correct response for a given item difficulty, \code{b}, and a given ability 
+#' correct response for a given item difficulty, \code{b}, and a given ability
 #' estimate, \code{theta}. Note that \code{theta} is typically passed as a
 #' vector of abilities and so a vector of probabilities is returned.
 #'
@@ -18,7 +18,7 @@ prob <- function(b, theta) {
 #' Item information function
 #'
 #' Returns the individual information for a given item along the vector of
-#' theta values supplied. These are summed to provide the test infromation 
+#' theta values supplied. These are summed to provide the test infromation
 #' function.
 #'
 #' @param b The item difficulty estimate
@@ -45,7 +45,7 @@ iif <- function(b, theta) {
 #' @param theta The person ability estimate. This is the \code{theta} estimate
 #'   from [get_person_estimates()] (not the RIT score). Defaults to a sequence
 #'   from -6 to 6 in increments of 0.01.
-#' @keywords internal
+#' @keywords Internal
 #' @noRd
 tif_ <- function(id, name, theta = seq(-6, 6, 0.01)) {
   rit <- convert_theta(
@@ -194,9 +194,9 @@ tcc_ <- function(id, name, theta) {
 #' Produce Test Characteristic Curve Plots
 #'
 #' @inheritParams tif_plot
-#' @param content Subset the plot to a specific content area. Defaults to 
-#'   "ELA|Math", which will select both ELA and Math. 
-#' @param grades The grade levels to include in the plot. Defaults to 
+#' @param content Subset the plot to a specific content area. Defaults to
+#'   "ELA|Math", which will select both ELA and Math.
+#' @param grades The grade levels to include in the plot. Defaults to
 #'   \code{[3-8]}, in which case grades 3 through 8 will be selected. Any grade
 #'   range can be supplied, with the range passed in brackets. A single grade
 #'   can also be supplied, which does not require brackets, (e.g., \code{5}

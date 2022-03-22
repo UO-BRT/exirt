@@ -1,4 +1,4 @@
-#' High-level function to esimate/create student estimates
+#' High-level function to estimate/create student estimates
 #'
 #' This function does the modeling and pulls the student estimates
 #' for every grade/content area (unless a specific grade/content area is
@@ -18,7 +18,7 @@ estimate_abilities <- function(test, single_df = TRUE) {
   pers[c("content", "grade", nms)]
 }
 
-#' High-level function to estimate/create item difficulty estimates 
+#' High-level function to estimate/create item difficulty estimates
 #' for field-test items
 #'
 #' This function does the modeling and pulls the item difficulty estimates
