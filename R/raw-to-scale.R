@@ -25,10 +25,10 @@ convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
   cuts <- pull_cuts(name)
 
   ss <- (raw_theta_tbl$theta * 10) + cuts$add
-  if (round) {
+  if (isTRUE(round)) {
     ss <- round2(ss)
   }
-  if (!grepl("^Rdg|^Wri", name)) {
+  if (isFALSE(grepl("^Rdg|^Wri", name))) {
     pl <- cut(ss,
       breaks = c(-Inf, cuts$c1, cuts$c2, cuts$c3, Inf),
       labels = 1:4
@@ -56,7 +56,7 @@ convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
 #' All conversions are returned for all tests.
 #'
 #' @param round Should the RIT scores be rounded? Defaults to \code{TRUE}. Note
-#'   the rounding is done as typical, not as [base::round()] does. See the 
+#'   the rounding is done as typical, not as [base::round()] does. See the
 #'   source code for the \code{round2} function for more detail.
 #' @export
 #'
