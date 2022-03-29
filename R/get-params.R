@@ -107,8 +107,8 @@ estimate_theta <- function(model, full_demo_data) {
   sink()
   close(f)
 
-  full_demo_data$theta <- as.numeric(fs[, 1])
-  full_demo_data$theta_se <- as.numeric(fs[, 2])
+  full_demo_data$theta <- as.numeric(fs[, 1, drop = TRUE])
+  full_demo_data$theta_se <- as.numeric(fs[, 2, drop = TRUE])
 
   full_demo_data
 }
