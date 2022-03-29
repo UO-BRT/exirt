@@ -80,33 +80,34 @@ tif_ <- function(id, name, theta = seq(-6, 6, 0.01)) {
 #' values supplied. Internally, the \code{theta} values are converted to RIT
 #' scores to make the output more directly interpretable.
 #'
-#' @param id The data frame returned from [get_item_diffs()].
+#' @param item_diff_table The data frame returned from [get_item_diffs()]
+#'   with \code{single_df = FALSE}.
 #' @param theta The person ability estimate. This is the \code{theta} estimate
 #'   from [get_person_estimates()] (not the RIT score). Defaults to a sequence
 #'   from -6 to 6 in increments of 0.01.
 #' @export
-tif <- function(id, theta = seq(-6, 6, 0.01)) {
-  if (is.data.frame(id)) {
-    return(tif_(id, infer_test(id$item), theta))
+tif <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
+  if (is.data.frame(item_diff_table)) {
+    return(tif_(item_diff_table, infer_test(item_diff_table$item), theta))
   }
   Map(
     function(diffs, nms) {
       tif_(diffs, nms, theta)
       },
-      diffs = id,
-      nms = names(id)
+      diffs = item_diff_table,
+      nms = names(item_diff_table)
   )
 }
 
 #' Plot the test infromation function
 #'
-#' @param id The data frame returned from [get_item_diffs()].
+#' @param item_diff_table The data frame returned from [get_item_diffs()].
 #' @param theta The person ability estimate. This is the \code{theta} estimate
 #'   from [get_person_estimates()] (not the RIT score). Defaults to a sequence
 #'   from -6 to 6 in increments of 0.01.
 #' @export
-tif_plot <- function(id, theta = seq(-6, 6, 0.01)) {
-  tif_df <- tif(id, theta = theta)
+tif_plot <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
+  tif_df <- tif(item_diff_table, theta = theta)
   if (is.data.frame(tif_df)) {
     return(tif_plot_(tif_df))
   }
@@ -129,6 +130,7 @@ tif_plot_ <- function(tif_df) {
       aes(xintercept = as.numeric(as.character(cuts)), color = cuts),
       cut_frame
     ) +
+    guides(color = FALSE) +
     labs(
       title = paste0(content, ": Grade ", grade),
       x = "RIT",
@@ -143,18 +145,18 @@ tif_plot_ <- function(tif_df) {
 #'
 #' @inherit tif
 #' @export
-tcc <- function(id, theta = seq(-6, 6, 0.01)) {
-  if (is.data.frame(id)) {
-    nm <- infer_test(id$item)
-    out <- tcc_(id, nm, theta)
+tcc <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
+  if (is.data.frame(item_diff_table)) {
+    nm <- infer_test(item_diff_table$item)
+    out <- tcc_(item_diff_table, nm, theta)
     out$test <- nm
   } else {
     out <- Map(
       function(diffs, nms) {
         tcc_(diffs, nms, theta)
       },
-      diffs = id,
-      nms = names(id)
+      diffs = item_diff_table,
+      nms = names(item_diff_table)
     )
     out <- bind_dfs(out)
   }
@@ -165,13 +167,13 @@ tcc <- function(id, theta = seq(-6, 6, 0.01)) {
 
 #' @keywords internal
 #' @noRd
-tcc_ <- function(id, name, theta) {
+tcc_ <- function(item_diff_table, name, theta) {
   rit <- convert_theta(
     data.frame(theta = theta, theta_se = 1),
     name,
     round = FALSE
   )
-  p <- vapply(id$difficulty, prob, theta, FUN.VALUE = double(length(theta)))
+  p <- vapply(item_diff_table$difficulty, prob, theta, FUN.VALUE = double(length(theta)))
 
   cut <- pull_cuts(name)
   cut <- cut[, grepl("^c\\d", names(cut))]
@@ -203,7 +205,7 @@ tcc_ <- function(id, name, theta) {
 #'   would select only grade 5)
 #' @export
 tcc_plot <- function(
-    id,
+    item_diff_table,
     theta = seq(-6, 6, 0.01),
     content = c("ELA|Math", "ELA", "Math", "Science", "ELA|Science",
                 "Math|Science", "all"),
@@ -212,7 +214,7 @@ tcc_plot <- function(
   content <- match.arg(content)
   content <- ifelse(content == "all", ".+", content)
 
-  tcc_df <- tcc(id, theta)
+  tcc_df <- tcc(item_diff_table, theta)
   selection <- grepl(content, tcc_df$content) & grepl(grades, tcc_df$grade)
   tcc_df <- tcc_df[selection, ]
 
