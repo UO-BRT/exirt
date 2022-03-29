@@ -33,6 +33,8 @@ estimate_abilities <- function(test, single_df = TRUE) {
 estimate_ft_difficulties <- function(test, single_df = TRUE) {
   models <- rasch(test, omit_field_test = FALSE)
   ft_items <- get_ft_items(models)
+
+  # consider changing to an error
   if (nrow(ft_items) == 0) {
     warning("No field test items detected.", call. = FALSE)
     return()
@@ -40,12 +42,16 @@ estimate_ft_difficulties <- function(test, single_df = TRUE) {
 
   item_estimates <- get_item_diffs(models, single_df)
 
+  # This only works for a list of tests (all of them), not just a single test
+  # because you need to only merge on `"item_id"` if it's a single test
   out <- merge(
     item_estimates,
     ft_items,
     by = c("test", "item_id"),
     all.y = TRUE
   )
+
+  # same as above
   out <- out[order(out$test, out$item_loc), ]
   out <- out[, -grep("item_loc", names(out))]
 
