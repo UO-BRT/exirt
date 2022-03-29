@@ -13,8 +13,6 @@
 #' @param omit_field_test Should field test items (those that are not anchored)
 #'   be omitted in the estimation? Defaults to \code{TRUE}. Note this should
 #'   always be \code{TRUE} when person estimates are extracted from the model.
-#' @param anchored Should the model be estimated with the operational items
-#' anchored at their estimated values? Logical, defaults to \code{TRUE}.
 #' @param ... Additional arguments passed to [TAM::tam.mml()]
 #' @export
 #' @return A list of models
@@ -24,7 +22,7 @@
 #'   all_tests <- dbprocess::get_items(db = "2021")
 #'   models <- rasch(all_tests)
 #' }
-rasch <- function(test, omit_field_test = TRUE, anchored = TRUE, ...) {
+rasch <- function(test, omit_field_test = TRUE, ...) {
   itms <- orextdb::db_get("Items", db = attr(test, "db"))
   if (is.data.frame(test)) {
     return(rasch_(test, itms, omit_field_test, anchored, ...))
@@ -40,7 +38,7 @@ rasch <- function(test, omit_field_test = TRUE, anchored = TRUE, ...) {
 #' @param ... Additional arguments passed to [TAM::tam.mml()]
 #' @keywords internal
 #' @noRd
-rasch_ <- function(test, items, omit_field_test = TRUE, anchored = TRUE, ...) {
+rasch_ <- function(test, items, omit_field_test = TRUE, ...) {
   item_data <- prep_items(test)
   anchors <- create_anchors(test, items)
 
@@ -49,19 +47,17 @@ rasch_ <- function(test, items, omit_field_test = TRUE, anchored = TRUE, ...) {
   ft_ids <- names(item_data[, ft, drop = FALSE])
   ft_frame <- data.frame(item_loc = ft, item_id = ft_ids)
 
-  if (omit_field_test) {
+  if (isTRUE(omit_field_test)) {
     anchor_locs <- anchors[, "item_location", drop = TRUE]
     item_data <- item_data[, anchor_locs]
     anchors <- cbind(seq_len(ncol(item_data)), anchors[, 2, drop = TRUE])
   }
 
-  if (anchored) {
-    out <- tam.mml(
-      item_data,
-      xsi.fixed = anchors,
-      verbose = FALSE)
-  } else {
-    out <- tam.mml(item_data, verbose = FALSE, ...)
-  }
+  out <- tam.mml(
+    item_data,
+    xsi.fixed = anchors,
+    verbose = FALSE
+  )
+
   list(model = out, field_test_items = ft_frame)
 }
