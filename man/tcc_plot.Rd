@@ -5,7 +5,7 @@
 \title{Produce Test Characteristic Curve Plots}
 \usage{
 tcc_plot(
-  id,
+  item_diff_table,
   theta = seq(-6, 6, 0.01),
   content = c("ELA|Math", "ELA", "Math", "Science", "ELA|Science", "Math|Science",
     "all"),
@@ -13,7 +13,7 @@ tcc_plot(
 )
 }
 \arguments{
-\item{id}{The data frame returned from \code{\link[=get_item_diffs]{get_item_diffs()}}.}
+\item{item_diff_table}{The data frame returned from \code{\link[=get_item_diffs]{get_item_diffs()}}.}
 
 \item{theta}{The person ability estimate. This is the \code{theta} estimate
 from \code{\link[=get_person_estimates]{get_person_estimates()}} (not the RIT score). Defaults to a sequence

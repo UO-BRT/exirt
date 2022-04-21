@@ -3,7 +3,6 @@
 #' @return A data frame for the specific test with only items and all missing
 #'   values recoded to zero.
 #' @keywords internal
-#' @noRd
 #' @examples
 #' \dontrun{
 #' g3mth <- dbprocess::get_items(3, "Math")
@@ -30,7 +29,6 @@ prep_items <- function(test) {
 #' @param itemfile The items table from the database, e.g.,
 #'   \code{orextdb::db_get("Items")}
 #' @keywords internal
-#' @noRd
 
 create_anchors <- function(test, itemfile) {
   test <- prep_items(test)
@@ -51,7 +49,6 @@ create_anchors <- function(test, itemfile) {
 #'
 #' @param l A list of data frames
 #' @keywords internal
-#' @noRd
 bind_dfs <- function(l) {
   nms <- names(l)
 
@@ -78,7 +75,6 @@ is_item <- function(d) {
 #' @param x A number (type == double)
 #' @param n The number of digits to round to
 #' @keywords internal
-#' @noRd
 round2 <- function(x, n = 0) {
   directionality <- sign(x)
   out <- abs(x) * 10^n + 0.5
@@ -97,7 +93,6 @@ round2 <- function(x, n = 0) {
 #' #> [1] "red, green, blue, and orange"
 #' }
 #' @keywords internal
-#' @noRd
 paste_collapse <- function(x) {
   x[length(x)] <- paste("and", x[length(x)])
   x[-length(x)] <- paste0(x[-length(x)], ",")

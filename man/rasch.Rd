@@ -4,7 +4,7 @@
 \alias{rasch}
 \title{Function estimate Rasch models}
 \usage{
-rasch(test, omit_field_test = TRUE, anchored = TRUE, ...)
+rasch(test, omit_field_test = TRUE, ...)
 }
 \arguments{
 \item{test}{Either a list of test score data from which to estimate models
@@ -16,16 +16,13 @@ example.}
 be omitted in the estimation? Defaults to \code{TRUE}. Note this should
 always be \code{TRUE} when person estimates are extracted from the model.}
 
-\item{anchored}{Should the model be estimated with the operational items
-anchored at their estimated values? Logical, defaults to \code{TRUE}.}
-
 \item{...}{Additional arguments passed to \code{\link[TAM:tam.mml]{TAM::tam.mml()}}}
 }
 \value{
 A list of models
 }
 \description{
-Uses \code{\link[TAM:tam.mml]{TAM::tam.mml()}} under the hood, becuase the theta estimates from this
+Uses \code{\link[TAM:tam.mml]{TAM::tam.mml()}} under the hood, because the theta estimates from this
 package most closely matched those from Winsteps (specifically for extreme)
 cases. Can estimate models from either a list tests or a single test.
 Takes care of the item prep (i.e., recoding \code{NA} values to 0) and,
@@ -35,6 +32,6 @@ optionally, item anchoring.
 \dontrun{
   library(exirt)
   all_tests <- dbprocess::get_items(db = "2021")
-  models <- rasch_batch(all_tests)
+  models <- rasch(all_tests)
 }
 }

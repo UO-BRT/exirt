@@ -4,10 +4,10 @@
 \alias{tif_plot}
 \title{Plot the test infromation function}
 \usage{
-tif_plot(id, theta = seq(-6, 6, 0.01))
+tif_plot(item_diff_table, theta = seq(-6, 6, 0.01))
 }
 \arguments{
-\item{id}{The data frame returned from \code{\link[=get_item_diffs]{get_item_diffs()}}.}
+\item{item_diff_table}{The data frame returned from \code{\link[=get_item_diffs]{get_item_diffs()}}.}
 
 \item{theta}{The person ability estimate. This is the \code{theta} estimate
 from \code{\link[=get_person_estimates]{get_person_estimates()}} (not the RIT score). Defaults to a sequence

@@ -10,7 +10,6 @@
 #' @param theta The person ability estimate. This is the \code{theta} estimate
 #'   from [get_person_estimates()] (not the RIT score).
 #' @keywords internal
-#' @noRd
 prob <- function(b, theta) {
   1 / (1 + exp(-(theta - b)))
 }
@@ -25,7 +24,6 @@ prob <- function(b, theta) {
 #' @param theta The person ability estimate. This is the \code{theta} estimate
 #'   from [get_person_estimates()] (not the RIT score).
 #' @keywords internal
-#' @noRd
 iif <- function(b, theta) {
   p <- vapply(b, prob, theta, FUN.VALUE = double(length(theta)))
   q <- 1 - p
@@ -46,7 +44,6 @@ iif <- function(b, theta) {
 #'   from [get_person_estimates()] (not the RIT score). Defaults to a sequence
 #'   from -6 to 6 in increments of 0.01.
 #' @keywords Internal
-#' @noRd
 tif_ <- function(id, name, theta = seq(-6, 6, 0.01)) {
   rit <- convert_theta(
     data.frame(theta = theta, theta_se = 1),
@@ -116,7 +113,6 @@ tif_plot <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
 
 #' @param tif_df The test information function data frame. Output from [tif()]
 #' @keywords internal
-#' @noRd
 tif_plot_ <- function(tif_df) {
   shade_frame <- tif_df[tif_df$tif >= 5, ]
   cut_frame <- attr(tif_df, "cuts")
@@ -166,7 +162,6 @@ tcc <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
 }
 
 #' @keywords internal
-#' @noRd
 tcc_ <- function(item_diff_table, name, theta) {
   rit <- convert_theta(
     data.frame(theta = theta, theta_se = 1),

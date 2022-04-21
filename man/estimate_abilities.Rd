@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimates.R
 \name{estimate_abilities}
 \alias{estimate_abilities}
-\title{High-level function to esimate/create student estimates}
+\title{High-level function to estimate/create student estimates}
 \usage{
 estimate_abilities(test, single_df = TRUE)
 }
