@@ -96,7 +96,7 @@ tif <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
   )
 }
 
-#' Plot the test infromation function
+#' Plot the test information function
 #'
 #' @param item_diff_table The data frame returned from [get_item_diffs()].
 #' @param theta The person ability estimate. This is the \code{theta} estimate
@@ -111,8 +111,11 @@ tif_plot <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
   lapply(tif_df, tif_plot_)
 }
 
+#' Internal function that uses \code{tif()} output
+#'
 #' @param tif_df The test information function data frame. Output from [tif()]
 #' @keywords internal
+#'
 tif_plot_ <- function(tif_df) {
   shade_frame <- tif_df[tif_df$tif >= 5, ]
   cut_frame <- attr(tif_df, "cuts")

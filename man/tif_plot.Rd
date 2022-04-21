@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{tif_plot}
 \alias{tif_plot}
-\title{Plot the test infromation function}
+\title{Plot the test information function}
 \usage{
 tif_plot(item_diff_table, theta = seq(-6, 6, 0.01))
 }
@@ -14,5 +14,5 @@ from \code{\link[=get_person_estimates]{get_person_estimates()}} (not the RIT sc
 from -6 to 6 in increments of 0.01.}
 }
 \description{
-Plot the test infromation function
+Plot the test information function
 }

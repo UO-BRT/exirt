@@ -115,3 +115,24 @@ infer_test <- function(item_ids) {
   }
   paste0(content, "_G", grade)
 }
+
+#' Create a patterned data frame for all possible raw scores
+#' @param item_names The column names (items) from which to generate the
+#'   data frame. These become the column names of the patterned data frame
+#' @keywords internal
+create_pattern_frame <- function(item_names) {
+  n <- length(item_names)
+
+  full_zeros <- matrix(rep(0, n), nrow = 1)
+  full_ones <- matrix(rep(1, n), nrow = 1)
+
+  ones <- lapply(seq_len(n - 1), function(x) rep(1, x))
+  zeros <- lapply(rev(seq_len(n - 1)), function(x) rep(0, x))
+
+  m <- Map(function(a, b) matrix(c(a, b), nrow = 1), a = ones, b = zeros)
+  m <- c(list(full_zeros), m, list(full_ones))
+
+  d <- as.data.frame(Reduce(rbind, m))
+  names(d) <- item_names
+  d
+}

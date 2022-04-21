@@ -4,7 +4,7 @@
 \alias{raw_to_rit}
 \title{Raw to RIT conversions}
 \usage{
-raw_to_rit(round = TRUE)
+raw_to_rit(round = TRUE, subscore = FALSE)
 }
 \arguments{
 \item{round}{Should the RIT scores be rounded? Defaults to \code{TRUE}. Note
