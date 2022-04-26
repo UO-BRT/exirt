@@ -25,9 +25,9 @@
 rasch <- function(test, omit_field_test = TRUE, ...) {
   itms <- orextdb::db_get("Items", db = attr(test, "db"))
   if (is.data.frame(test)) {
-    return(rasch_(test, itms, omit_field_test, anchored, ...))
+    return(rasch_(test, itms, omit_field_test, ...))
   }
-  lapply(test, rasch_, itms, omit_field_test, anchored, ...)
+  lapply(test, rasch_, itms, omit_field_test, ...)
 }
 
 #' Internal function to estimate a Rasch model
@@ -37,7 +37,7 @@ rasch <- function(test, omit_field_test = TRUE, ...) {
 #'   \code{orextdb::db_get("Items")}
 #' @param ... Additional arguments passed to [TAM::tam.mml()]
 #' @keywords internal
-#' @noRd
+
 rasch_ <- function(test, items, omit_field_test = TRUE, ...) {
   item_data <- prep_items(test)
   anchors <- create_anchors(test, items)

@@ -3,7 +3,6 @@
 #' @return A data frame for the specific test with only items and all missing
 #'   values recoded to zero.
 #' @keywords internal
-#' @noRd
 #' @examples
 #' \dontrun{
 #' g3mth <- dbprocess::get_items(3, "Math")
@@ -30,7 +29,6 @@ prep_items <- function(test) {
 #' @param itemfile The items table from the database, e.g.,
 #'   \code{orextdb::db_get("Items")}
 #' @keywords internal
-#' @noRd
 
 create_anchors <- function(test, itemfile) {
   test <- prep_items(test)
@@ -51,7 +49,6 @@ create_anchors <- function(test, itemfile) {
 #'
 #' @param l A list of data frames
 #' @keywords internal
-#' @noRd
 bind_dfs <- function(l) {
   nms <- names(l)
 
@@ -78,7 +75,6 @@ is_item <- function(d) {
 #' @param x A number (type == double)
 #' @param n The number of digits to round to
 #' @keywords internal
-#' @noRd
 round2 <- function(x, n = 0) {
   directionality <- sign(x)
   out <- abs(x) * 10^n + 0.5
@@ -97,12 +93,16 @@ round2 <- function(x, n = 0) {
 #' #> [1] "red, green, blue, and orange"
 #' }
 #' @keywords internal
-#' @noRd
 paste_collapse <- function(x) {
   x[length(x)] <- paste("and", x[length(x)])
   x[-length(x)] <- paste0(x[-length(x)], ",")
   paste(x, collapse = " ")
 }
+
+#' Function to infer the test type based on the item ids.
+#'
+#' Will stop and give a message if there is more than 1 content area.
+#' @param item_ids a vector of item ids from which to infer test type
 
 infer_test <- function(item_ids) {
   content <- unique(substr(item_ids, 1, 1))
@@ -119,4 +119,25 @@ infer_test <- function(item_ids) {
     stop("More than one grade level is represented in the given items")
   }
   paste0(content, "_G", grade)
+}
+
+#' Create a patterned data frame for all possible raw scores
+#' @param item_names The column names (items) from which to generate the
+#'   data frame. These become the column names of the patterned data frame
+#' @keywords internal
+create_pattern_frame <- function(item_names) {
+  n <- length(item_names)
+
+  full_zeros <- matrix(rep(0, n), nrow = 1)
+  full_ones <- matrix(rep(1, n), nrow = 1)
+
+  ones <- lapply(seq_len(n - 1), function(x) rep(1, x))
+  zeros <- lapply(rev(seq_len(n - 1)), function(x) rep(0, x))
+
+  m <- Map(function(a, b) matrix(c(a, b), nrow = 1), a = ones, b = zeros)
+  m <- c(list(full_zeros), m, list(full_ones))
+
+  d <- as.data.frame(Reduce(rbind, m))
+  names(d) <- item_names
+  d
 }

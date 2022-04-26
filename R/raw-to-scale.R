@@ -21,21 +21,20 @@ pull_cuts <- function(name) {
   cuts[cuts$content == cg[1] & cuts$grade == cg[2], ]
 }
 
-convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
-  cuts <- pull_cuts(name)
 
-  ss <- (raw_theta_tbl$theta * 10) + cuts$add
+convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
+  cuts_tmp <- pull_cuts(name)
+
+  ss <- (raw_theta_tbl$theta * 10) + cuts_tmp$add
   if (isTRUE(round)) {
     ss <- round2(ss)
   }
-  if (isFALSE(grepl("^Rdg|^Wri", name))) {
-    pl <- cut(ss,
-      breaks = c(-Inf, cuts$c1, cuts$c2, cuts$c3, Inf),
-      labels = 1:4
+    pl <-
+      cut(
+        ss,
+        breaks = c(-Inf, cuts_tmp$c1, cuts_tmp$c2, cuts_tmp$c3, Inf),
+        labels = 1:4
     )
-  } else {
-    pl <- rep(NA_integer_, length(ss))
-  }
 
   d <- data.frame(
     theta = raw_theta_tbl$theta,
@@ -47,6 +46,67 @@ convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
   raw_theta_ss <- raw_theta_tbl[!grepl("^theta", names(raw_theta_tbl))]
   cbind.data.frame(raw_theta_ss, d)
 }
+
+
+raw_to_scale_subscores <- function() {
+
+  pd <- dbprocess::get_pattern_data()
+  pd <- pd[grep('ELA', names(pd))]
+
+  models <- rasch(pd)
+
+  d <- lapply(pd, function(x) {
+    x$id <- rownames(x)
+    x
+  })
+
+  all_items <- lapply(d, names)
+
+  reading_items <- lapply(all_items, grep, pattern = 'RL|RF|RI')
+  writing_items <- lapply(all_items, grep, pattern = 'WR')
+
+  all_item_names <- names(all_items)
+
+  names(reading_items) <- gsub(pattern = 'ELA', replacement = 'Rdg', x = all_item_names)
+  names(writing_items) <- gsub(pattern = 'ELA', replacement = 'Wri', x = all_item_names)
+
+  for (i in seq_along(names(all_items))){
+    reading_items[[i]] <- all_items[[i]][reading_items[[i]]]
+    writing_items[[i]] <- all_items[[i]][writing_items[[i]]]
+  }
+
+
+  reading_subscore_pd <- lapply(reading_items, create_pattern_frame)
+  writing_subscore_pd <- lapply(writing_items, create_pattern_frame)
+
+
+
+  reading_rasch <-
+    rasch(
+      test = reading_subscore_pd
+    )
+
+  writing_rasch <-
+    rasch(
+      test = writing_subscore_pd
+    )
+
+
+  reading_thetas <- Map(estimate_theta, reading_rasch, reading_subscore_pd)
+  reading_raw_theta <- lapply(reading_thetas, function(x) {
+    x$raw <- rowSums(x[, seq_len(ncol(x) - 2)])
+    x[c("raw", "theta", "theta_se")]
+  })
+
+  writing_thetas <- Map(estimate_theta, writing_rasch, writing_subscore_pd)
+  writing_raw_theta <- lapply(writing_thetas, function(x) {
+    x$raw <- rowSums(x[, seq_len(ncol(x) - 2)])
+    x[c("raw", "theta", "theta_se")]
+  })
+
+  list(reading = reading_raw_theta, writing = writing_raw_theta)
+}
+
 
 #' Raw to RIT conversions
 #'
@@ -60,9 +120,23 @@ convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
 #'   source code for the \code{round2} function for more detail.
 #' @export
 #'
-raw_to_rit <- function(round = TRUE) {
-  rs <- raw_to_scale()
-  out <- Map(convert_theta, rs, names(rs))
+raw_to_rit <- function(round = TRUE, subscore = FALSE) {
+  if (subscore == FALSE){
+    rs <- raw_to_scale()
+    out <- Map(convert_theta, rs, names(rs))
+    out <- bind_dfs(out)
+  }
+  if (subscore == TRUE){
+    rs <- raw_to_scale_subscores()
+    rs_reading <- rs$reading
+    rs_writing <- rs$writing
+    out_reading <- Map(convert_theta, rs_reading, names(rs_reading))
+    out_writing <- Map(convert_theta, rs_writing, names(rs_writing))
+    out_writing <- bind_dfs(out_writing)
+    out_reading <- bind_dfs(out_reading)
+    out <- rbind.data.frame(out_writing, out_reading)
+  }
 
-  bind_dfs(out)
+  return(out)
 }
+

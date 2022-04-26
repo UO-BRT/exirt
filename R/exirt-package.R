@@ -4,7 +4,7 @@
 #' @importFrom TAM tam.mml
 #' @importFrom CDM IRT.factor.scores
 #' @importFrom ggplot2 ggplot aes geom_line geom_ribbon geom_vline labs .data
-#'             facet_wrap
+#'             facet_wrap guides
 #' @importFrom stats qnorm
 "_PACKAGE"
 

@@ -38,7 +38,6 @@ get_ft_items <- function(model_ob) {
 #' @param model The fitted model object. Output from [rasch()].
 #' @return A data frame with the item ID, difficulty, and 95% CI.
 #' @keywords internal
-#' @noRd
 pull_item_diffs <- function(model) {
   difficulties <- model$model$xsi
 
@@ -99,7 +98,6 @@ get_person_estimates <- function(model_ob, full_demo_data, single_df = FALSE) {
 #' @return The \code{full_demo_data} data frame, with additional \code{theta}
 #'   and \code{theta_se} columns.
 #' @keywords internal
-#' @noRd
 estimate_theta <- function(model, full_demo_data) {
   f <- file()
   sink(file = f)

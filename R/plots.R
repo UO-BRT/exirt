@@ -10,7 +10,6 @@
 #' @param theta The person ability estimate. This is the \code{theta} estimate
 #'   from [get_person_estimates()] (not the RIT score).
 #' @keywords internal
-#' @noRd
 prob <- function(b, theta) {
   1 / (1 + exp(-(theta - b)))
 }
@@ -18,14 +17,13 @@ prob <- function(b, theta) {
 #' Item information function
 #'
 #' Returns the individual information for a given item along the vector of
-#' theta values supplied. These are summed to provide the test infromation
+#' theta values supplied. These are summed to provide the test information
 #' function.
 #'
 #' @param b The item difficulty estimate
 #' @param theta The person ability estimate. This is the \code{theta} estimate
 #'   from [get_person_estimates()] (not the RIT score).
 #' @keywords internal
-#' @noRd
 iif <- function(b, theta) {
   p <- vapply(b, prob, theta, FUN.VALUE = double(length(theta)))
   q <- 1 - p
@@ -46,7 +44,6 @@ iif <- function(b, theta) {
 #'   from [get_person_estimates()] (not the RIT score). Defaults to a sequence
 #'   from -6 to 6 in increments of 0.01.
 #' @keywords Internal
-#' @noRd
 tif_ <- function(id, name, theta = seq(-6, 6, 0.01)) {
   rit <- convert_theta(
     data.frame(theta = theta, theta_se = 1),
@@ -99,7 +96,7 @@ tif <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
   )
 }
 
-#' Plot the test infromation function
+#' Plot the test information function
 #'
 #' @param item_diff_table The data frame returned from [get_item_diffs()].
 #' @param theta The person ability estimate. This is the \code{theta} estimate
@@ -114,9 +111,11 @@ tif_plot <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
   lapply(tif_df, tif_plot_)
 }
 
+#' Internal function that uses \code{tif()} output
+#'
 #' @param tif_df The test information function data frame. Output from [tif()]
 #' @keywords internal
-#' @noRd
+#'
 tif_plot_ <- function(tif_df) {
   shade_frame <- tif_df[tif_df$tif >= 5, ]
   cut_frame <- attr(tif_df, "cuts")
@@ -165,8 +164,14 @@ tcc <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
   out[c("content", "grade", "rit", "expected_total")]
 }
 
+#' Create a dataframe used to make test characteristic curves
+#'
+#' @param item_diff_table The data frame returned from [get_item_diffs()].
+#' @param theta The person ability estimate. This is the \code{theta} estimate
+#' @param name The name of the given test, e.g., \code{"ELA_G8"},
+#'   \code{"Math_G11"}.
 #' @keywords internal
-#' @noRd
+#'
 tcc_ <- function(item_diff_table, name, theta) {
   rit <- convert_theta(
     data.frame(theta = theta, theta_se = 1),
