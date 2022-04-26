@@ -1,3 +1,5 @@
+#' get scale scores for each possible raw score
+
 raw_to_scale <- function() {
   pd <- get_pattern_data()
   models <- rasch(pd)
@@ -16,12 +18,19 @@ raw_to_scale <- function() {
   raw_theta
 }
 
+#' use the \code{cuts.R} file to get the cut values for proficiency thresholds
+#' @param name The name of the given test, e.g., \code{"ELA_G8"},
+#'   \code{"Math_G11"}.
 pull_cuts <- function(name) {
   cg <- unique(strsplit(name, "_G")[[1]])
   cuts[cuts$content == cg[1] & cuts$grade == cg[2], ]
 }
 
-
+#' convert raw score to theta and proficiency estimates
+#' @param name The name of the given test, e.g., \code{"ELA_G8"}
+#' @param round Implement standard rounding, rather than R's rounding.
+#' @param raw_theta_tbl table with theta values, in a column called \code{theta}. Produced by \code{raw_to_scale()}
+#'
 convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
   cuts_tmp <- pull_cuts(name)
 
@@ -47,6 +56,7 @@ convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
   cbind.data.frame(raw_theta_ss, d)
 }
 
+#' obtain raw to scale scores for the ELA subgroups
 
 raw_to_scale_subscores <- function() {
 
@@ -118,6 +128,7 @@ raw_to_scale_subscores <- function() {
 #' @param round Should the RIT scores be rounded? Defaults to \code{TRUE}. Note
 #'   the rounding is done as typical, not as [base::round()] does. See the
 #'   source code for the \code{round2} function for more detail.
+#' @param subscore Do you want ELA subscores reported as well?
 #' @export
 #'
 raw_to_rit <- function(round = TRUE, subscore = FALSE) {

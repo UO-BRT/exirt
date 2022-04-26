@@ -88,10 +88,6 @@ round2 <- function(x, n = 0) {
 #' last elements.
 #'
 #' @param x A character vector
-#' @examples {
-#' paste_collapse(c("red", "green", "blue", "orange"))
-#' #> [1] "red, green, blue, and orange"
-#' }
 #' @keywords internal
 paste_collapse <- function(x) {
   x[length(x)] <- paste("and", x[length(x)])
