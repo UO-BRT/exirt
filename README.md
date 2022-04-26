@@ -209,13 +209,6 @@ rasch_mod_ft <-
     test = math_items, 
     omit_field_test = FALSE
   )
-#> NOTE 1: User only provided digits 
-#> 
-#> NOTE 2: `db` argument must specify a 4-digit year, with the first two 
-#> digits representing the start of the school year, and the 
-#> last two digits representing the end of the school year. `db` may 
-#> be passed with or without the `"ORExt"` prefix, e.g., `"1920"` 
-#> or `"ORExt1920"`.
 ```
 
 If we use the names of the field test items (defined above), we can then

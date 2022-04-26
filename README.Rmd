@@ -131,7 +131,7 @@ math_items <-
 
 We use `estimate_abilities()` provide test score data with `test` to determine the ability estimates for all non-field-test items. We'll continue with only grade 11 math, but a list of test score data can be passed to this argument.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 math_abilities <- 
   exirt::estimate_abilities(
     test = math_items
@@ -142,7 +142,7 @@ math_abilities <-
 
 With very similar specification to `estimate_abilities()`, we can `estimate_ft_difficulties()` to determine the difficulty parameters of the field-test items
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 math_ft_difficulty <- 
   exirt::estimate_ft_difficulties(
   test = math_items
@@ -155,7 +155,7 @@ math_ft_difficulty <-
 
 The `rasch()` function his is mostly an internal function, called by the functions above, but may be useful to someone wanting additional model information. It uses `TAM::tam.mml()` to run the Rasch models. You can tell this to omit the field test items or anchor the other items.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 rasch_mod <- 
   exirt::rasch(
     test = math_items, 
