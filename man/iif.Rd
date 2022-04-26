@@ -14,7 +14,7 @@ from \code{\link[=get_person_estimates]{get_person_estimates()}} (not the RIT sc
 }
 \description{
 Returns the individual information for a given item along the vector of
-theta values supplied. These are summed to provide the test infromation
+theta values supplied. These are summed to provide the test information
 function.
 }
 \keyword{internal}

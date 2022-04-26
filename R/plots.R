@@ -17,7 +17,7 @@ prob <- function(b, theta) {
 #' Item information function
 #'
 #' Returns the individual information for a given item along the vector of
-#' theta values supplied. These are summed to provide the test infromation
+#' theta values supplied. These are summed to provide the test information
 #' function.
 #'
 #' @param b The item difficulty estimate
@@ -164,7 +164,14 @@ tcc <- function(item_diff_table, theta = seq(-6, 6, 0.01)) {
   out[c("content", "grade", "rit", "expected_total")]
 }
 
+#' Create a dataframe used to make test characteristic curves
+#'
+#' @param item_diff_table The data frame returned from [get_item_diffs()].
+#' @param theta The person ability estimate. This is the \code{theta} estimate
+#' @param name The name of the given test, e.g., \code{"ELA_G8"},
+#'   \code{"Math_G11"}.
 #' @keywords internal
+#'
 tcc_ <- function(item_diff_table, name, theta) {
   rit <- convert_theta(
     data.frame(theta = theta, theta_se = 1),

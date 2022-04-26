@@ -99,6 +99,11 @@ paste_collapse <- function(x) {
   paste(x, collapse = " ")
 }
 
+#' Function to infer the test type based on the item ids.
+#'
+#' Will stop and give a message if there is more than 1 content area.
+#' @param item_ids a vector of item ids from which to infer test type
+
 infer_test <- function(item_ids) {
   content <- unique(substr(item_ids, 1, 1))
   if(length(content) > 1) {
