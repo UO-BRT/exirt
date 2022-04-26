@@ -26,12 +26,219 @@ access the live data via a web API ([orextdb](https://github.com/UO-BRT/orextdb)
 ([dbprocess](https://github.com/UO-BRT/dbprocess)), and (c) analyze the data
 ([exirt](https://github.com/UO-BRT/exirt)).
 
-## Installation
+Here are the three packages created by Daniel Anderson and maintained by Christopher Loan:
 
-You can install exirt with:
+    * `{orextdb}` — accesses data base
+    * `{dbprocess}` — processes data
+    * `{exirt}` — fit irt models, plot data, etc.
+
+# Getting Set Up
+
+These are stored on github in the UO-BRT organization. To install these, use `devtools::install_github()` with the organization and package name, separated by a slash:
+
+## Install Packages
 
 ```{r eval = FALSE}
-# install.packages("remotes")
-remotes::install_github("datalorax/exirt")
+devtools::install_github('UO-BRT/orextdb')
+devtools::install_github('UO-BRT/dbprocess')
+devtools::install_github('UO-BRT/exirt')
+```
+
+## Load these packages
+
+You'll see I'm also loading the `{tidyverse}` for data manipulation.
+
+```{r message = FALSE}
+library(orextdb)
+library(dbprocess)
+library(exirt)
+library(tidyverse)
+```
+
+# `{orextdb}`
+
+## Accessing the Data Base
+
+You can check if you have access with `db_key()`. If this returns an empty string, you do not have the key. You can set the key by wrapping the key in quotes within `db_set_key()` (e.g., `db_set_key('asdfjkl-123456')`)
+
+Let's work with 2018-19 for our purposes. databases are specified with the prefix "ORExt" and then the final two digits of the academic year. So for 2018-19, we specify `db = 'ORExt1819'`. 
+
+
+We also have to specify which database we want. If we want to estimate the ability estimates, we need to specify which table we want pulled from the database. 
+
+This is done with the argument `table = `, which is a string specifying the specific table from the Oregon Extended live database. 
+
+`table` should be one of 
+
+    * "Accomodations"
+    * "Answers"
+    * "Districts" 
+    * "Exams"
+    * "Items" 
+    * "Preferences" 
+    * "Schools"
+    * "Students" 
+    * "Students_old" 
+    * "Submissions" 
+    * "SupplementalDistricts"
+    * "SupplementalSchools"
+    * "Tasks"
+    * "User" 
+    * "UserStudents"
+    * "UserStudents_old"
+
+
+Check the documentation with `?db_get()` for further arguments, though defaults have been set to be useful and will not need to be changed typically.
+
+
+```{r}
+answers_1819 <- 
+  orextdb::db_get(
+    table = 'Answers',
+    db = 'ORExt1819'
+    )
+
+answers_1819
+```
+
+```{r}
+students_1819 <- 
+  orextdb::db_get(
+    table = 'Students',
+    db = 'ORExt1819'
+    )
+```
+
+# `{dbprocess}`
+
+The main function in `{dbprocess}` is `get_items()`. This function pulls item level data with student demographics from the live ORExt database. You have the option to specify a grade, content area, and if you want demographics or not. If you do not specify, all grade and content areas are selected and demographics are included.
+
+Be sure to specify your database, if you don't want it to pull based on your date (which pulls the current year).
+
+```{r}
+math_items <- 
+  dbprocess::get_items(
+    content = 'Math', 
+    grade = 11,
+    db = 'ORExt1819'
+    )
+
+```
+
+# `{exirt}`
+
+## estimate abilities (omitting field test)
+
+We use `estimate_abilities()` provide test score data with `test` to determine the ability estimates for all non-field-test items. We'll continue with only grade 11 math, but a list of test score data can be passed to this argument.
+
+```{r message=FALSE, warning=FALSE}
+math_abilities <- 
+  exirt::estimate_abilities(
+    test = math_items
+    )
+```
+
+## estimate field test difficulty
+
+With very similar specification to `estimate_abilities()`, we can `estimate_ft_difficulties()` to determine the difficulty parameters of the field-test items
+
+```{r message=FALSE, warning=FALSE}
+math_ft_difficulty <- 
+  exirt::estimate_ft_difficulties(
+  test = math_items
+)
+```
+
+## other functions
+
+### fit Rasch models
+
+The `rasch()` function his is mostly an internal function, called by the functions above, but may be useful to someone wanting additional model information. It uses `TAM::tam.mml()` to run the Rasch models. You can tell this to omit the field test items or anchor the other items.
+
+```{r message=FALSE, warning=FALSE}
+rasch_mod <- 
+  exirt::rasch(
+    test = math_items, 
+    omit_field_test = TRUE, 
+    anchored = FALSE
+  )
+```
+
+### pulling information from Rasch model
+
+We can get all of the field test item names from the Rasch model with the function `get_ft_items()`
+
+```{r}
+ft_item_names <- exirt::get_ft_items(rasch_mod)
+```
+We can then re-fit the rasch model without omitting the field test items. 
+
+```{r}
+rasch_mod_ft <- 
+  exirt::rasch(
+    test = math_items, 
+    omit_field_test = FALSE
+  )
+```
+
+If we use the names of the field test items (defined above), we can then fitler out the item difficulties, so we only look at the field test items.
+
+```{r}
+exirt::get_item_diffs(rasch_mod_ft) %>% 
+  filter(item_id %in% ft_item_names$item_id)
+```
+
+
+It might be useful to have a list of all raw scores, thetas, RIT scores, and corresponding performance levels. All of this can be returned with `exirt::raw_to_rit()`. This returns for all tests and grades, and can be filtered by whatever grade you want with `df %>% filter(test %in% c('Math_G3', 'ELA_G3'))` for example.
+
+```{r}
+raw_to_rit_scores <- 
+  exirt::raw_to_rit()
+
+raw_to_rit_scores %>% 
+  filter(test %in% c('Math_G3', 'ELA_G3')) %>% 
+  head()
+```
+If you want these for the ELA subscores, you can repeat the call, but add the `subscore = TRUE` argument (the default is `FALSE`, giving you the Math, ELA, and Science scores).
+
+```{r}
+raw_to_rit_subscores <- 
+  exirt::raw_to_rit(subscore = TRUE)
+
+raw_to_rit_subscores %>% 
+  head()
+```
+### Item difficulties
+
+```{r}
+item_difficulties <- 
+  exirt::get_item_diffs(model_ob = rasch_mod)
+
+item_difficulties %>% 
+  head()
+```
+
+## Plotting 
+
+### Test characteristic curves
+
+```{r message=FALSE, warning=FALSE}
+tcc_plot <- 
+  exirt::tcc_plot(
+    item_diff_table = item_difficulties, 
+    content = 'Math', 
+    grades = "11"
+    )
+
+tcc_plot
+```
+
+### Test information functions
+
+```{r message=FALSE, warning=FALSE}
+tif_plot <- 
+  exirt::tif_plot(item_diff_table = item_difficulties) 
+
+tif_plot
 ```
 

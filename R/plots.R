@@ -129,7 +129,7 @@ tif_plot_ <- function(tif_df) {
       aes(xintercept = as.numeric(as.character(cuts)), color = cuts),
       cut_frame
     ) +
-    guides(color = FALSE) +
+    guides(color = 'none') +
     labs(
       title = paste0(content, ": Grade ", grade),
       x = "RIT",
