@@ -13,10 +13,4 @@ paste_collapse(x)
 Adds commas after each element and a "and" between the last and second to
 last elements.
 }
-\examples{
-{
-paste_collapse(c("red", "green", "blue", "orange"))
-#> [1] "red, green, blue, and orange"
-}
-}
 \keyword{internal}

@@ -10,6 +10,8 @@ raw_to_rit(round = TRUE, subscore = FALSE)
 \item{round}{Should the RIT scores be rounded? Defaults to \code{TRUE}. Note
 the rounding is done as typical, not as \code{\link[base:Round]{base::round()}} does. See the
 source code for the \code{round2} function for more detail.}
+
+\item{subscore}{Do you want ELA subscores reported as well?}
 }
 \description{
 Creates a single dataframe that has the raw score, theta value and standard
