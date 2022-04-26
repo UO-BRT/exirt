@@ -9,6 +9,9 @@ paste_collapse(x)
 \arguments{
 \item{x}{A character vector}
 }
+\value{
+string
+}
 \description{
 Adds commas after each element and a "and" between the last and second to
 last elements.

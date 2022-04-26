@@ -10,6 +10,9 @@ create_pattern_frame(item_names)
 \item{item_names}{The column names (items) from which to generate the
 data frame. These become the column names of the patterned data frame}
 }
+\value{
+data frame with all possible raw scores
+}
 \description{
 Create a patterned data frame for all possible raw scores
 }

@@ -186,8 +186,7 @@ tell this to omit the field test items or anchor the other items.
 rasch_mod <- 
   exirt::rasch(
     test = math_items, 
-    omit_field_test = TRUE, 
-    anchored = FALSE
+    omit_field_test = TRUE
   )
 ```
 
@@ -291,6 +290,18 @@ item_difficulties %>%
 #> 6 Math_G11 M11FUN3.9_L01      -0.82  0    NA    NA
 ```
 
+### Person estimates
+
+Note, I’m not printing these for privacy
+
+``` r
+person_estimates <- 
+  get_person_estimates(
+    model_ob = rasch_mod,
+    full_demo_data = math_items
+    )
+```
+
 ## Plotting
 
 ### Test characteristic curves
@@ -306,7 +317,7 @@ tcc_plot <-
 tcc_plot
 ```
 
-<img src="man/figures/README-unnamed-chunk-16-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
 
 ### Test information functions
 
@@ -317,4 +328,4 @@ tif_plot <-
 tif_plot
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="100%" />

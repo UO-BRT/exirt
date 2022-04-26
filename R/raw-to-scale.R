@@ -1,4 +1,12 @@
-#' get scale scores for each possible raw score
+#' get scaled scores for all raw values
+#'
+#' @return data frame with theta scores and standard errors for all raw scores
+#' get scale scores for each possible raw score. Primarily used in \code{convert_theta()}
+#' @examples
+#' library(exirt)
+#' \dontrun{
+#' raw_to_scale()
+#' }
 
 raw_to_scale <- function() {
   pd <- get_pattern_data()
@@ -14,50 +22,16 @@ raw_to_scale <- function() {
     x$raw <- rowSums(x[, seq_len(ncol(x) - 3)])
     x[c("raw", "theta", "theta_se")]
   })
-
   raw_theta
 }
 
-#' use the \code{cuts.R} file to get the cut values for proficiency thresholds
-#' @param name The name of the given test, e.g., \code{"ELA_G8"},
-#'   \code{"Math_G11"}.
-pull_cuts <- function(name) {
-  cg <- unique(strsplit(name, "_G")[[1]])
-  cuts[cuts$content == cg[1] & cuts$grade == cg[2], ]
-}
-
-#' convert raw score to theta and proficiency estimates
-#' @param name The name of the given test, e.g., \code{"ELA_G8"}
-#' @param round Implement standard rounding, rather than R's rounding.
-#' @param raw_theta_tbl table with theta values, in a column called \code{theta}. Produced by \code{raw_to_scale()}
-#'
-convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
-  cuts_tmp <- pull_cuts(name)
-
-  ss <- (raw_theta_tbl$theta * 10) + cuts_tmp$add
-  if (isTRUE(round)) {
-    ss <- round2(ss)
-  }
-    pl <-
-      cut(
-        ss,
-        breaks = c(-Inf, cuts_tmp$c1, cuts_tmp$c2, cuts_tmp$c3, Inf),
-        labels = 1:4
-    )
-
-  d <- data.frame(
-    theta = raw_theta_tbl$theta,
-    theta_se = raw_theta_tbl$theta_se,
-    rit = ss,
-    rit_se = raw_theta_tbl$theta_se * 10,
-    perf_level = pl
-  )
-  raw_theta_ss <- raw_theta_tbl[!grepl("^theta", names(raw_theta_tbl))]
-  cbind.data.frame(raw_theta_ss, d)
-}
 
 #' obtain raw to scale scores for the ELA subgroups
-
+#' @examples
+#' library(exirt)
+#' \dontrun{
+#' raw_to_scale_subscores()
+#' }
 raw_to_scale_subscores <- function() {
 
   pd <- dbprocess::get_pattern_data()
@@ -118,6 +92,58 @@ raw_to_scale_subscores <- function() {
 }
 
 
+#' use the \code{cuts.R} file to get the cut values for proficiency thresholds
+#' @param name The name of the given test, e.g., \code{"ELA_G8"},
+#'   \code{"Math_G11"}.
+#' @return data frame with the content and grade you specified with \code{name}
+#' @examples
+#' library(exirt)
+#' \dontrun{
+#' pull_cuts('ELA_G8')
+#' }
+
+pull_cuts <- function(name) {
+  cg <- unique(strsplit(name, "_G")[[1]])
+  cuts[cuts$content == cg[1] & cuts$grade == cg[2], ]
+}
+
+#' convert raw score to theta and proficiency estimates
+#' @param name The name of the given test, e.g., \code{"ELA_G8"}
+#' @param round Implement standard rounding, rather than R's rounding.
+#' @param raw_theta_tbl table with theta values, in a column called \code{theta}.
+#' Produced by \code{raw_to_scale()} or  \code{raw_to_scale_subscores()}
+#' @return data frame with the raw scores, thetas, and proficiency estimates
+#' @examples
+#' library(exirt)
+#' \dontrun{
+#' convert_theta(raw_theta_tbl = raw_to_scale(), name = 'ELA_G8')
+#' }
+
+convert_theta <- function(raw_theta_tbl, name, round = TRUE) {
+  cuts_tmp <- pull_cuts(name)
+
+  ss <- (raw_theta_tbl$theta * 10) + cuts_tmp$add
+  if (isTRUE(round)) {
+    ss <- round2(ss)
+  }
+    pl <-
+      cut(
+        ss,
+        breaks = c(-Inf, cuts_tmp$c1, cuts_tmp$c2, cuts_tmp$c3, Inf),
+        labels = 1:4
+    )
+
+  d <- data.frame(
+    theta = raw_theta_tbl$theta,
+    theta_se = raw_theta_tbl$theta_se,
+    rit = ss,
+    rit_se = raw_theta_tbl$theta_se * 10,
+    perf_level = pl
+  )
+  raw_theta_ss <- raw_theta_tbl[!grepl("^theta", names(raw_theta_tbl))]
+  cbind.data.frame(raw_theta_ss, d)
+}
+
 #' Raw to RIT conversions
 #'
 #' Creates a single dataframe that has the raw score, theta value and standard
@@ -129,6 +155,15 @@ raw_to_scale_subscores <- function() {
 #'   the rounding is done as typical, not as [base::round()] does. See the
 #'   source code for the \code{round2} function for more detail.
 #' @param subscore Do you want ELA subscores reported as well?
+#' @return data frame with raw score, theta value and standard
+#' error associated with that raw score, the conversion to a RIT score and
+#' RIT standard error, and the performance level for the corresponding score
+#' @examples
+#' library(exirt)
+#' \dontrun{
+#' ela_math_science <- raw_to_rit()
+#' rdg_wri <- raw_to_rit(subscore = FALSE)
+#' }
 #' @export
 #'
 raw_to_rit <- function(round = TRUE, subscore = FALSE) {

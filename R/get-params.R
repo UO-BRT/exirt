@@ -17,6 +17,17 @@ get_item_diffs <- function(model_ob, single_df = TRUE) {
 #'
 #' @param model_ob The fitted model or list of fitted models
 #' @export
+#' @return data frame of field test items
+#' @examples
+#' \dontrun{
+#' rasch_mod <-
+#' exirt::rasch(
+#'   test = math_items,
+#'   omit_field_test = TRUE,
+#'   anchored = FALSE
+#' )
+#' ft_item_names <- exirt::get_ft_items(rasch_mod)
+#' }
 get_ft_items <- function(model_ob) {
   if (length(model_ob) == 2 & names(model_ob)[1] == "model") {
     return(model_ob[[2]])
@@ -38,6 +49,15 @@ get_ft_items <- function(model_ob) {
 #' @param model The fitted model object. Output from [rasch()].
 #' @return A data frame with the item ID, difficulty, and 95% CI.
 #' @keywords internal
+#' @examples
+#' \dontrun{
+#' rasch_mod_ft <-
+#'   exirt::rasch(
+#'     test = math_items,
+#'     omit_field_test = FALSE
+#'   )
+#' exirt::get_item_diffs(rasch_mod_ft)
+#' }
 pull_item_diffs <- function(model) {
   difficulties <- model$model$xsi
 
@@ -74,6 +94,26 @@ pull_item_diffs <- function(model) {
 #'   the results to other functions in the package.
 #' @return Person estimates with confidence standard errors, including
 #'   conversions to RIT scores and the performance level
+#'   @examples
+#'   \dontrun{
+#'   library(exirt)
+#'   math_items <-
+#'      dbprocess::get_items(
+#'         content = 'Math',
+#'         grade = 11,
+#'         db = 'ORExt1819'
+#'         )
+#'   rasch_mod <-
+#'      exirt::rasch(
+#'         test = math_items,
+#'         omit_field_test = TRUE
+#'         )
+#'   person_estimates <-
+#'      get_person_estimates(
+#'         model_ob = rasch_mod,
+#'         full_demo_data = math_items
+#'         )
+#'   }
 #' @export
 get_person_estimates <- function(model_ob, full_demo_data, single_df = FALSE) {
   out <- Map(estimate_theta, model_ob, full_demo_data)

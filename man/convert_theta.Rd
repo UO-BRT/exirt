@@ -7,12 +7,22 @@
 convert_theta(raw_theta_tbl, name, round = TRUE)
 }
 \arguments{
-\item{raw_theta_tbl}{table with theta values, in a column called \code{theta}. Produced by \code{raw_to_scale()}}
+\item{raw_theta_tbl}{table with theta values, in a column called \code{theta}.
+Produced by \code{raw_to_scale()} or  \code{raw_to_scale_subscores()}}
 
 \item{name}{The name of the given test, e.g., \code{"ELA_G8"}}
 
 \item{round}{Implement standard rounding, rather than R's rounding.}
 }
+\value{
+data frame with the raw scores, thetas, and proficiency estimates
+}
 \description{
 convert raw score to theta and proficiency estimates
+}
+\examples{
+library(exirt)
+\dontrun{
+convert_theta(raw_theta_tbl = raw_to_scale(), name = 'ELA_G8')
+}
 }

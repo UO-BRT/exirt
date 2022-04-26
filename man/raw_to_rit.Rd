@@ -13,9 +13,21 @@ source code for the \code{round2} function for more detail.}
 
 \item{subscore}{Do you want ELA subscores reported as well?}
 }
+\value{
+data frame with raw score, theta value and standard
+error associated with that raw score, the conversion to a RIT score and
+RIT standard error, and the performance level for the corresponding score
+}
 \description{
 Creates a single dataframe that has the raw score, theta value and standard
 error associated with that raw score, the conversion to a RIT score and
 RIT standard error, and the performance level for the corresponding score.
 All conversions are returned for all tests.
+}
+\examples{
+library(exirt)
+\dontrun{
+ela_math_science <- raw_to_rit()
+rdg_wri <- raw_to_rit(subscore = FALSE)
+}
 }

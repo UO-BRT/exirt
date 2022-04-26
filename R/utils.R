@@ -49,6 +49,7 @@ create_anchors <- function(test, itemfile) {
 #'
 #' @param l A list of data frames
 #' @keywords internal
+#' @return a dataframe of binded lists
 bind_dfs <- function(l) {
   nms <- names(l)
 
@@ -66,6 +67,11 @@ bind_dfs <- function(l) {
 
   out
 }
+
+#' checks if column names in a data frame is is an item
+#' @keywords internal
+#' @param d test from \code{dbprocess::get_items()}
+#' @return a logical vector (match or not for each element of x).
 
 is_item <- function(d) {
   grepl("^[EMS]\\d", names(d))
@@ -89,6 +95,7 @@ round2 <- function(x, n = 0) {
 #'
 #' @param x A character vector
 #' @keywords internal
+#' @return string
 paste_collapse <- function(x) {
   x[length(x)] <- paste("and", x[length(x)])
   x[-length(x)] <- paste0(x[-length(x)], ",")
@@ -99,6 +106,13 @@ paste_collapse <- function(x) {
 #'
 #' Will stop and give a message if there is more than 1 content area.
 #' @param item_ids a vector of item ids from which to infer test type
+#' @return the content and grade, based on item_ids or a warning
+#' (if input is not a single grade and test)
+#' @examples
+#' \dontrun{
+#' library(exirt)
+#' infer_test(list_of_item_ids)
+#' }
 
 infer_test <- function(item_ids) {
   content <- unique(substr(item_ids, 1, 1))
@@ -121,6 +135,8 @@ infer_test <- function(item_ids) {
 #' @param item_names The column names (items) from which to generate the
 #'   data frame. These become the column names of the patterned data frame
 #' @keywords internal
+#' @return data frame with all possible raw scores
+
 create_pattern_frame <- function(item_names) {
   n <- length(item_names)
 

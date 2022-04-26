@@ -9,6 +9,9 @@ bind_dfs(l)
 \arguments{
 \item{l}{A list of data frames}
 }
+\value{
+a dataframe of binded lists
+}
 \description{
 Bind a list of data frames together
 }

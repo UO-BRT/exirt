@@ -24,6 +24,26 @@ the results to other functions in the package.}
 \value{
 Person estimates with confidence standard errors, including
 conversions to RIT scores and the performance level
+@examples
+\dontrun{
+  library(exirt)
+  math_items <-
+     dbprocess::get_items(
+        content = 'Math',
+        grade = 11,
+        db = 'ORExt1819'
+        )
+  rasch_mod <-
+     exirt::rasch(
+        test = math_items,
+        omit_field_test = TRUE
+        )
+  person_estimates <-
+     get_person_estimates(
+        model_ob = rasch_mod,
+        full_demo_data = math_items
+        )
+  }
 }
 \description{
 Get person abilities

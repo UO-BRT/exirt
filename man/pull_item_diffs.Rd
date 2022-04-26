@@ -15,4 +15,14 @@ A data frame with the item ID, difficulty, and 95\% CI.
 \description{
 Pull item difficulties from a single model
 }
+\examples{
+\dontrun{
+rasch_mod_ft <-
+  exirt::rasch(
+    test = math_items,
+    omit_field_test = FALSE
+  )
+exirt::get_item_diffs(rasch_mod_ft)
+}
+}
 \keyword{internal}

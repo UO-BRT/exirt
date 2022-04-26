@@ -2,10 +2,20 @@
 % Please edit documentation in R/raw-to-scale.R
 \name{raw_to_scale}
 \alias{raw_to_scale}
-\title{get scale scores for each possible raw score}
+\title{get scaled scores for all raw values}
 \usage{
 raw_to_scale()
 }
+\value{
+data frame with theta scores and standard errors for all raw scores
+get scale scores for each possible raw score. Primarily used in \code{convert_theta()}
+}
 \description{
-get scale scores for each possible raw score
+get scaled scores for all raw values
+}
+\examples{
+library(exirt)
+\dontrun{
+raw_to_scale()
+}
 }

@@ -10,6 +10,15 @@ pull_cuts(name)
 \item{name}{The name of the given test, e.g., \code{"ELA_G8"},
 \code{"Math_G11"}.}
 }
+\value{
+data frame with the content and grade you specified with \code{name}
+}
 \description{
 use the \code{cuts.R} file to get the cut values for proficiency thresholds
+}
+\examples{
+library(exirt)
+\dontrun{
+pull_cuts('ELA_G8')
+}
 }

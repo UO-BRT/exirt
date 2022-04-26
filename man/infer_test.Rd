@@ -9,6 +9,16 @@ infer_test(item_ids)
 \arguments{
 \item{item_ids}{a vector of item ids from which to infer test type}
 }
+\value{
+the content and grade, based on item_ids or a warning
+(if input is not a single grade and test)
+}
 \description{
 Will stop and give a message if there is more than 1 content area.
+}
+\examples{
+\dontrun{
+library(exirt)
+infer_test(list_of_item_ids)
+}
 }

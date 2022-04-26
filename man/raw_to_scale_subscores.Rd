@@ -9,3 +9,9 @@ raw_to_scale_subscores()
 \description{
 obtain raw to scale scores for the ELA subgroups
 }
+\examples{
+library(exirt)
+\dontrun{
+raw_to_scale_subscores()
+}
+}

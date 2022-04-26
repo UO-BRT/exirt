@@ -159,8 +159,7 @@ The `rasch()` function his is mostly an internal function, called by the functio
 rasch_mod <- 
   exirt::rasch(
     test = math_items, 
-    omit_field_test = TRUE, 
-    anchored = FALSE
+    omit_field_test = TRUE
   )
 ```
 
@@ -217,6 +216,19 @@ item_difficulties <-
 item_difficulties %>% 
   head()
 ```
+
+### Person estimates
+
+Note, I'm not printing these for privacy
+
+```{r}
+person_estimates <- 
+  get_person_estimates(
+    model_ob = rasch_mod,
+    full_demo_data = math_items
+    )
+```
+
 
 ## Plotting 
 

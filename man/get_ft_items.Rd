@@ -9,6 +9,20 @@ get_ft_items(model_ob)
 \arguments{
 \item{model_ob}{The fitted model or list of fitted models}
 }
+\value{
+data frame of field test items
+}
 \description{
 Get field test item IDs from a single model or list of models
+}
+\examples{
+\dontrun{
+rasch_mod <-
+exirt::rasch(
+  test = math_items,
+  omit_field_test = TRUE,
+  anchored = FALSE
+)
+ft_item_names <- exirt::get_ft_items(rasch_mod)
+}
 }
