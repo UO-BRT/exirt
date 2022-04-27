@@ -19,6 +19,7 @@ get_item_diffs <- function(model_ob, single_df = TRUE) {
 #' @export
 #' @return data frame of field test items
 #' @examples
+#' library(exirt)
 #' \dontrun{
 #' rasch_mod <-
 #' exirt::rasch(
@@ -50,6 +51,7 @@ get_ft_items <- function(model_ob) {
 #' @return A data frame with the item ID, difficulty, and 95% CI.
 #' @keywords internal
 #' @examples
+#' library(exirt)
 #' \dontrun{
 #' rasch_mod_ft <-
 #'   exirt::rasch(
@@ -94,26 +96,27 @@ pull_item_diffs <- function(model) {
 #'   the results to other functions in the package.
 #' @return Person estimates with confidence standard errors, including
 #'   conversions to RIT scores and the performance level
-#'   @examples
-#'   \dontrun{
-#'   library(exirt)
-#'   math_items <-
-#'      dbprocess::get_items(
-#'         content = 'Math',
-#'         grade = 11,
-#'         db = 'ORExt1819'
-#'         )
-#'   rasch_mod <-
-#'      exirt::rasch(
-#'         test = math_items,
-#'         omit_field_test = TRUE
-#'         )
-#'   person_estimates <-
-#'      get_person_estimates(
-#'         model_ob = rasch_mod,
-#'         full_demo_data = math_items
-#'         )
-#'   }
+#' @examples
+#'
+#' library(exirt)
+#' \dontrun{
+#' math_items <-
+#'    dbprocess::get_items(
+#'       content = 'Math',
+#'       grade = 11,
+#'       db = 'ORExt1819'
+#'       )
+#' rasch_mod <-
+#'    exirt::rasch(
+#'       test = math_items,
+#'       omit_field_test = TRUE
+#'       )
+#' person_estimates <-
+#'    get_person_estimates(
+#'       model_ob = rasch_mod,
+#'       full_demo_data = math_items
+#'       )
+#'}
 #' @export
 get_person_estimates <- function(model_ob, full_demo_data, single_df = FALSE) {
   out <- Map(estimate_theta, model_ob, full_demo_data)
