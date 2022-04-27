@@ -96,8 +96,8 @@ pull_item_diffs <- function(model) {
 #'   the results to other functions in the package.
 #' @return Person estimates with confidence standard errors, including
 #'   conversions to RIT scores and the performance level
-#' @examples
 #'
+#' @examples
 #' library(exirt)
 #' \dontrun{
 #' math_items <-
