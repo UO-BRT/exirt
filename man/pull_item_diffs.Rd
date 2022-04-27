@@ -16,6 +16,7 @@ A data frame with the item ID, difficulty, and 95\% CI.
 Pull item difficulties from a single model
 }
 \examples{
+library(exirt)
 \dontrun{
 rasch_mod_ft <-
   exirt::rasch(

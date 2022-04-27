@@ -16,6 +16,7 @@ data frame of field test items
 Get field test item IDs from a single model or list of models
 }
 \examples{
+library(exirt)
 \dontrun{
 rasch_mod <-
 exirt::rasch(
